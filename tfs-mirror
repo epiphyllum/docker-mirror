@@ -15,6 +15,7 @@ VERSION=${VERSION:-"latest"};
 
 if [ $# -lt 1 ]; then
     echo "Usage: tfs-mirror run|start|stop|clean"
+    exit 0;
 fi
 
 # 创建+初始化+启动
