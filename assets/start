@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#############################################
+# 准备目录
+#############################################
+# /data/apt-mirror
+#      /www
+#         /epel
+#         /repoforge
+#         /centos
+#
+mkdir -p /data/{apt-mirror,www/{epel,repoforge,centos}};
+
+chown -R www-data:www-data /data
+chown -R www-data:www-data /var/log/apache2
+
+export APACHE_RUN_USER=www-data
+export APACHE_RUN_GROUP=www-data
+export APACHE_LOCK_DIR=/var/lock/apache2
+export APACHE_PID_FILE=/var/run/apache2.pid
+export APACHE_LOG_DIR=/var/log/apache2
+
+
+# 启动apache
+exec apache2 -D FOREGROUND
+

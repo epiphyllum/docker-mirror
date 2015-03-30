@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sudo docker run -i -t -d \
+     --name="tfs-mirror" \
+     --hostname="tfs-mirror" \
+     -v $HOME/appstore/tfs/mirror/data:/data \
+     -v $HOME/appstore/tfs/mirror/log:/var/log/apache2 \
+     hary/mirror

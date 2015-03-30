@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# mirror of ubuntu 14.04 and centos 6.6,7.0
+
+. $TFS_HOME/conf/mirror;
+VERSION=${VERSION:-"latest"};
+
+if [ $# -lt 1 ]; then
+    Usage;
+fi
+
+# 创建+初始化+启动
+function run_docker {
+
+    # 创建启动
+    echo "run docker using image[hary/mirror] version[$VERSION]";
+    sudo docker run -i -t -d \
+    --name tfs-mirror \
+    --hostname tfs-mirror \
+    -v "CENTOS_BASE_REPO:$CENTOS_BASE_REPO" \
+    -v "CENTOS_EPEL_REPO:$CENTOS_EPEL_REPO" \
+    -v "CENTOS_FORGE_REPO:$CENTOS_FORGE_REPO" \
+    -v "UBUNTU_REPO:$UBUNTU_REPO" \
+    hary/mirror:$VERSION;
+
+    # 设置IP地址
+    sudo pipework docker0 tfs-mirror $IP/$MASK@$GATEWAY;
+    echo "IP address is[$IP/$MASK] and gateway[$GATEWAY]";
+}
+
+# 启动
+function start_docker {
+    sudo docker start tfs-mirror;
+
+    # 设置IP地址
+    sudo pipework docker0 tfs-mirror $IP/$MASK@$GATEWAY;
+    echo "IP address is[$IP/$MASK] and gateway[$GATEWAY]";
+}
+
+# 停止
+function stop_docker {
+    sudo docker stop tfs-mirror;
+}
+
+
+#####################################################################################
+# main
+#####################################################################################
+case $1 in
+   # create container and initialize it and running
+   run) run_docker;;
+
+   # docker start
+   start) start_docker;;
+
+   # docker stop_docker
+   stop) stop_docker;;
+
+   clean) echo "clean completed";;
+esac
+

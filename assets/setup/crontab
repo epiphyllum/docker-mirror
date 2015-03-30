@@ -1,0 +1,3 @@
+# 每周５的19点开始执行apt-mirror
+0 19 * * 5 /usr/bin/apt-mirror            >> /data/log/apt-mirror-cron.log  2>&1
+0 19 * * 7 /setup/yum_rsync.sh /data/www  >> /data/log/yum-mirror-cron.log  2>&1
